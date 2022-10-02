@@ -1,15 +1,25 @@
 import { StatusBar } from "expo-status-bar";
 import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, ScrollView, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  ActivityIndicator,
+  Dimensions,
+  location,
+} from "react-native";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
+const API_KEY = "f3d5c2469982e773e13c8db08b7e90cb";
+
 export default function App() {
   const [city, setCity] = useState("Loding...");
-  const [location, setLocation] = useState();
+  const [days, setDays] = useState([]);
   const [ok, setOk] = useState(true);
-  const ask = async () => {
+  const getWeather = async () => {
     const { granted } = await Location.requestForegroundPermissionsAsync();
     if (!granted) {
       setOk(false);
@@ -21,18 +31,23 @@ export default function App() {
       { latitude, longitude },
       { useGoogleMaps: false }
     );
-    setCity(location[0].city)
+    setCity(location[0].city);
+    const response = await fetch(
+      "https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid={API_KEY}"
+    );
+    const json = await response.json();
+    setDays(json.daily);
   };
   console.log(location);
 
   useEffect(() => {
-    ask();
+    getWeather();
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.city}>
-        <Text style={styles.cityName}>Seoul</Text>
+        <Text style={styles.cityName}>{city}</Text>
       </View>
       <ScrollView
         pagingEnabled
@@ -40,22 +55,17 @@ export default function App() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.weather}
       >
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>Sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>Sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>Sunny</Text>
-        </View>
-        <View style={styles.day}>
-          <Text style={styles.temp}>27</Text>
-          <Text style={styles.description}>Sunny</Text>
-        </View>
+        {days.length === 0 ? (
+          <View style={styles.day}>
+            <ActivityIndicator
+              color="white"
+              style={{ marginTop: 10 }}
+              size="large"
+            />
+          </View>
+        ) : (
+          days.map((day, index) => <View Key={index} style={styles.day}></View>)
+        )}
       </ScrollView>
     </View>
   );
