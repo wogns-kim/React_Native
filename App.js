@@ -38,7 +38,6 @@ export default function App() {
     const json = await response.json();
     setDays(json.daily);
   };
-  console.log(location);
 
   useEffect(() => {
     getWeather();
@@ -59,12 +58,17 @@ export default function App() {
           <View style={styles.day}>
             <ActivityIndicator
               color="white"
-              style={{ marginTop: 10 }}
               size="large"
-            />
+              style={{ marginTop: 10 }}
+            ></ActivityIndicator>
           </View>
         ) : (
-          days.map((day, index) => <View Key={index} style={styles.day}></View>)
+          days.map((day, index) => (
+            <View key={index} style={styles.day}>
+              <Text style={styles.temp}>{day.temp.day}</Text>
+              <Text style={styles.description}>{day.weather[0].main}</Text>            
+            </View>
+          ))
         )}
       </ScrollView>
     </View>

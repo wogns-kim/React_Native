@@ -13,14 +13,14 @@
     "@expo/ngrok": "^4.1.0",
     "@expo/webpack-config": "^0.17.0",
     "expo": "~46.0.9",
+    "expo-location": "~14.3.0",
     "expo-status-bar": "~1.4.0",
     "metro": "^0.72.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "react-native": "0.69.5",
+    "react-native": "0.69.6",
     "react-native-web": "~0.18.7",
-    "save-dev": "^0.0.1-security",
-    "expo-location": "~14.3.0"
+    "save-dev": "^0.0.1-security"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
