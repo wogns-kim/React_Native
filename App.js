@@ -10,10 +10,15 @@ import {
   Dimensions,
   location,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const API_KEY = "f3d5c2469982e773e13c8db08b7e90cb";
+
+const icons = {
+  //  "Clear": weather-sunny
+};
 
 export default function App() {
   const [city, setCity] = useState("Loding...");
@@ -37,7 +42,6 @@ export default function App() {
     );
     const json = await response.json();
     setDays(json);
-    console.log(json);
   };
 
   useEffect(() => {
@@ -64,12 +68,27 @@ export default function App() {
             ></ActivityIndicator>
           </View>
         ) : (
-            <View style={styles.day}>
-              <Text style={styles.temp}>{days.main.temp}</Text>
-              <Text style={styles.description}>{days.weather[0].main}</Text>
+          <View style={styles.day}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                width:"100%"
+              }}
+            >
+              <Text style={styles.temp}>
+                {parseFloat(days.main.temp).toFixed(1)}
+              </Text>
+              <MaterialCommunityIcons
+                name="weather-sunny"
+                size={80}
+                color="white"
+              />
             </View>
-          )
-        }
+            <Text style={styles.description}>{days.weather[0].main}</Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -79,15 +98,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "tomato",
+
   },
   city: {
     flex: 1.1,
     justifyContent: "center",
     alignItems: "center",
+
   },
   cityName: {
     fontSize: 68,
     fontWeight: "500",
+    color: "#fff",
   },
   weather: {},
 
@@ -97,10 +119,16 @@ const styles = StyleSheet.create({
   },
   temp: {
     marginTop: 20,
-    fontSize: 120,
+    marginBottom: 15,
+    fontSize: 80,
+    marginLeft:20,
+    color: "#fff",
   },
   description: {
     marginTop: -30,
-    fontSize: 60,
+    fontSize: 50,
+    marginRight: 270,
+    color: "#fff",
+
   },
 });
